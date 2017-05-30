@@ -46,10 +46,10 @@ namespace pasta_web_file_finder
             }
         }
 
-        public void Download(WebClient wc, String track)
+        public void Download(ref WebClient wc, String track)
         {
             Directory.CreateDirectory(Path.Combine(Application.StartupPath, "OST", Nome));
-            wc.DownloadFile(track, Path.Combine(Application.StartupPath, "OST", Nome, track.Split('/')[track.Split('/').Length - 1].Replace('-', ' ')));
+            wc.DownloadFileAsync(new Uri(track), Path.Combine(Application.StartupPath, "OST", Nome, track.Split('/')[track.Split('/').Length - 1].Replace('-', ' ')));
         }
 
         public String ResolveFileName(String url, WebClient wc)

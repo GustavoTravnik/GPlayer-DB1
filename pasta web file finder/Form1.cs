@@ -18,7 +18,9 @@ namespace pasta_web_file_finder
         List<Game> games = new List<Game>();
         Game currentGame;
         List<String> currentSoundTracks = new List<string>();
-        int activeThreads = 0;     
+        volatile int activeThreads = 0;
+        private static readonly Object LOCKER = new object();
+        Thread filterThread;
 
         public Form1()
         {
@@ -104,18 +106,32 @@ namespace pasta_web_file_finder
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            listBox1.Visible = false;
-            listBox1.Items.Clear();
-            foreach(string s in currentSoundTracks.Where(k => k.ToLower().Contains(textBox1.Text.ToLower())))
+            filterThread?.Abort();
+            filterThread = new Thread(() => ApplyFilter());
+            filterThread.IsBackground = true;
+            filterThread.Start();
+        }
+
+        private void ApplyFilter()
+        {
+            lock (LOCKER)
             {
-                listBox1.Items.Add(s);
+                CreateLoadOn(listBox1);
+                listBox1.Visible = false;
+                listBox1.Items.Clear();
+                foreach (string s in currentSoundTracks.Where(k => k.ToLower().Contains(textBox1.Text.ToLower())))
+                {
+                    listBox1.Items.Add(s);
+                }
+                listBox1.Visible = true;
+                DestroyLoadOn(listBox1);
             }
-            listBox1.Visible = true;
         }
 
         private void DownloadCurrentTrack()
         {
-            currentGame.Download(wc, currentGame.Tracks[listBox2.SelectedItem.ToString()]);
+            Downloader download = new Downloader(new List<string>(){ listBox2.SelectedItem.ToString() }, currentGame);
+            download.ShowDialog();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -130,7 +146,8 @@ namespace pasta_web_file_finder
 
         private void listBox2_DoubleClick(object sender, EventArgs e)
         {
-            axWindowsMediaPlayer1.URL = currentGame.Tracks[listBox2.SelectedItem.ToString()];
+            if (listBox2.Items.Count > 0)
+                axWindowsMediaPlayer1.URL = currentGame.Tracks[listBox2.SelectedItem.ToString()];
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -143,6 +160,22 @@ namespace pasta_web_file_finder
                     listBox2_DoubleClick(sender, e);
                 }
             }
+        }
+
+        private void axWindowsMediaPlayer1_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
+        {
+            Text = "NP - " + axWindowsMediaPlayer1.Ctlcontrols.currentItem.name;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            List<String> lista = new List<string>();
+            foreach(String s in listBox2.Items)
+            {
+                lista.Add(s);
+            }
+            Downloader download = new Downloader(lista, currentGame);
+            download.ShowDialog();
         }
     }
 }

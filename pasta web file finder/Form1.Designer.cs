@@ -36,10 +36,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.loadPicture = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
+            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.loadPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.SuspendLayout();
             // 
             // listBox1
@@ -75,9 +76,9 @@
             // 
             this.button1.Location = new System.Drawing.Point(12, 562);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(414, 23);
+            this.button1.Size = new System.Drawing.Size(203, 23);
             this.button1.TabIndex = 3;
-            this.button1.Text = "Download";
+            this.button1.Text = "Download Musica Selecionada";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -97,15 +98,6 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // axWindowsMediaPlayer1
-            // 
-            this.axWindowsMediaPlayer1.Enabled = true;
-            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(12, 591);
-            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
-            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
-            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(868, 45);
-            this.axWindowsMediaPlayer1.TabIndex = 5;
-            // 
             // loadPicture
             // 
             this.loadPicture.BackColor = System.Drawing.Color.Black;
@@ -118,11 +110,32 @@
             this.loadPicture.TabStop = false;
             this.loadPicture.Visible = false;
             // 
+            // axWindowsMediaPlayer1
+            // 
+            this.axWindowsMediaPlayer1.Enabled = true;
+            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(12, 591);
+            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
+            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
+            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(868, 45);
+            this.axWindowsMediaPlayer1.TabIndex = 5;
+            this.axWindowsMediaPlayer1.MediaChange += new AxWMPLib._WMPOCXEvents_MediaChangeEventHandler(this.axWindowsMediaPlayer1_MediaChange);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(221, 562);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(203, 23);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Download Album";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(892, 643);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.loadPicture);
             this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.button2);
@@ -130,10 +143,12 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.listBox1);
+            this.DoubleBuffered = true;
             this.Name = "Form1";
-            this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "NP";
             ((System.ComponentModel.ISupportInitialize)(this.loadPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,6 +164,7 @@
         private System.Windows.Forms.Timer timer1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.PictureBox loadPicture;
+        private System.Windows.Forms.Button button3;
     }
 }
 
