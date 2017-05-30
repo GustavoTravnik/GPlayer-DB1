@@ -37,7 +37,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.loadPicture = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicture)).BeginInit();
             this.SuspendLayout();
             // 
             // listBox1
@@ -104,11 +106,24 @@
             this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(868, 45);
             this.axWindowsMediaPlayer1.TabIndex = 5;
             // 
+            // loadPicture
+            // 
+            this.loadPicture.BackColor = System.Drawing.Color.Black;
+            this.loadPicture.Image = global::pasta_web_file_finder.Properties.Resources.loading;
+            this.loadPicture.Location = new System.Drawing.Point(440, 568);
+            this.loadPicture.Name = "loadPicture";
+            this.loadPicture.Size = new System.Drawing.Size(10, 10);
+            this.loadPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.loadPicture.TabIndex = 6;
+            this.loadPicture.TabStop = false;
+            this.loadPicture.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(892, 643);
+            this.Controls.Add(this.loadPicture);
             this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -118,6 +133,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loadPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,6 +148,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer timer1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
+        private System.Windows.Forms.PictureBox loadPicture;
     }
 }
 

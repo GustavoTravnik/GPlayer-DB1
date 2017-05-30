@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Web;
-using System.Net;
-using System.Text.RegularExpressions;
-using WMPLib;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using WMPLib;
+using System.Threading;
 
 namespace pasta_web_file_finder
 {
@@ -22,22 +18,41 @@ namespace pasta_web_file_finder
         List<Game> games = new List<Game>();
         Game currentGame;
         List<String> currentSoundTracks = new List<string>();
+        int activeThreads = 0;     
 
         public Form1()
         {
             InitializeComponent();
-
-            FillListBySimbol("#", wc);
+            Control.CheckForIllegalCrossThreadCalls = false;
+            CreateLoadOn(listBox1);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
 
             for (int i = 65; i <= 90; i++)
             {
                 char letter = Convert.ToChar(i);
-                FillListBySimbol(letter.ToString(), wc);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { letter.ToString() });
             }
         }
 
-        public void FillListBySimbol(String simbol, WebClient wc)
+        private void CreateLoadOn(Control control)
         {
+            loadPicture.BackColor = System.Drawing.Color.Black;
+            loadPicture.Size = control.Size;
+            loadPicture.Location = control.Location;
+            loadPicture.Visible = true;
+            loadPicture.BringToFront();
+        }
+
+        private void DestroyLoadOn(Control control)
+        {
+            loadPicture.Visible = false;
+        }
+
+        public void FillListBySimbol(Object args)
+        {
+            activeThreads++;
+            String simbol = (String)((Object[])args)[0];
+            WebClient wc = new WebClient();
             String source = (wc.DownloadString("https://downloads.khinsider.com/game-soundtracks/browse/" + simbol));
             source = Regex.Split(source, "<p align=\"left\">")[1];
             String[] sourceParts = Regex.Split(source, "<a href=\"");
@@ -51,21 +66,40 @@ namespace pasta_web_file_finder
             {
                 Game game = new Game(s, wc);
                 games.Add(game);
-                listBox1.Items.Add(game.Nome);
+                Invoke(new MethodInvoker(() => AddItemToListBox1(new object[] { game.Nome })));
                 currentSoundTracks.Add(game.Nome);
             }
+            activeThreads--;
+
+            if (activeThreads == 0)
+            {
+                Invoke(new MethodInvoker(() => DestroyLoadOn(listBox1)));
+            }
+        }
+
+        private void AddItemToListBox1(Object[] args)
+        {
+            listBox1.Items.Add((String)args[0]);
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
+            axWindowsMediaPlayer1.Ctlcontrols.pause();
+            ThreadPool.QueueUserWorkItem(new WaitCallback(LoadMusicsBySelectedGame), new Object());
+        }
+
+        private void LoadMusicsBySelectedGame(Object args)
+        {
+            Invoke(new MethodInvoker(() => CreateLoadOn(listBox2)));
             currentGame = games.Find(k => k.Nome.Equals(listBox1.SelectedItem.ToString()));
             currentGame.LoadMusics(wc);
             listBox2.Items.Clear();
             foreach (KeyValuePair<string, string> kvp in currentGame.Tracks)
             {
-                
+
                 listBox2.Items.Add(kvp.Key);
             }
+            Invoke(new MethodInvoker(() => DestroyLoadOn(listBox2)));
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
