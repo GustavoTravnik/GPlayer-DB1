@@ -18,6 +18,7 @@ namespace pasta_web_file_finder
         List<Game> games = new List<Game>();
         Game currentGame;
         List<String> currentSoundTracks = new List<string>();
+        List<String> listMusicOst = new List<string>();
         volatile int activeThreads = 0;
         private static readonly Object LOCKER = new object();
         Thread filterThread;
@@ -26,7 +27,8 @@ namespace pasta_web_file_finder
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
-            CreateLoadOn(listBox1);
+            textBox1.ReadOnly = true;
+            CreateLoadOn(lstSiteOSTS);
             ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
 
             for (int i = 65; i <= 90; i++)
@@ -38,6 +40,10 @@ namespace pasta_web_file_finder
 
         private void CreateLoadOn(Control control)
         {
+            lstMusicsOST.Enabled = false;
+            lstSiteOSTS.Enabled = false;
+            control.Visible = false;
+            
             loadPicture.BackColor = System.Drawing.Color.Black;
             loadPicture.Size = control.Size;
             loadPicture.Location = control.Location;
@@ -48,6 +54,9 @@ namespace pasta_web_file_finder
         private void DestroyLoadOn(Control control)
         {
             loadPicture.Visible = false;
+            lstSiteOSTS.Enabled = true;
+            lstMusicsOST.Enabled = true;
+            control.Visible = true;
         }
 
         public void FillListBySimbol(Object args)
@@ -75,13 +84,14 @@ namespace pasta_web_file_finder
 
             if (activeThreads == 0)
             {
-                Invoke(new MethodInvoker(() => DestroyLoadOn(listBox1)));
+                Invoke(new MethodInvoker(() => DestroyLoadOn(lstSiteOSTS)));
+                textBox1.ReadOnly = false;
             }
         }
 
         private void AddItemToListBox1(Object[] args)
         {
-            listBox1.Items.Add((String)args[0]);
+            lstSiteOSTS.Items.Add((String)args[0]);
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
@@ -92,16 +102,17 @@ namespace pasta_web_file_finder
 
         private void LoadMusicsBySelectedGame(Object args)
         {
-            Invoke(new MethodInvoker(() => CreateLoadOn(listBox2)));
-            currentGame = games.Find(k => k.Nome.Equals(listBox1.SelectedItem.ToString()));
+            Invoke(new MethodInvoker(() => CreateLoadOn(lstMusicsOST)));
+            currentGame = games.Find(k => k.Nome.Equals(lstSiteOSTS.SelectedItem.ToString()));
             currentGame.LoadMusics(wc);
-            listBox2.Items.Clear();
+            lstMusicsOST.Items.Clear();
+            listMusicOst.Clear();
             foreach (KeyValuePair<string, string> kvp in currentGame.Tracks)
             {
-
-                listBox2.Items.Add(kvp.Key);
+                lstMusicsOST.Items.Add(kvp.Key);
+                listMusicOst.Add(kvp.Key);
             }
-            Invoke(new MethodInvoker(() => DestroyLoadOn(listBox2)));
+            Invoke(new MethodInvoker(() => DestroyLoadOn(lstMusicsOST)));
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -116,21 +127,22 @@ namespace pasta_web_file_finder
         {
             lock (LOCKER)
             {
-                CreateLoadOn(listBox1);
-                listBox1.Visible = false;
-                listBox1.Items.Clear();
+               
+                CreateLoadOn(lstSiteOSTS);
+                lstSiteOSTS.Visible = false;
+                lstSiteOSTS.Items.Clear();
                 foreach (string s in currentSoundTracks.Where(k => k.ToLower().Contains(textBox1.Text.ToLower())))
                 {
-                    listBox1.Items.Add(s);
+                    lstSiteOSTS.Items.Add(s);
                 }
-                listBox1.Visible = true;
-                DestroyLoadOn(listBox1);
+                lstSiteOSTS.Visible = true;
+                DestroyLoadOn(lstSiteOSTS);
             }
         }
 
         private void DownloadCurrentTrack()
         {
-            Downloader download = new Downloader(new List<string>(){ listBox2.SelectedItem.ToString() }, currentGame);
+            Downloader download = new Downloader(new List<string>(){ lstMusicsOST.SelectedItem.ToString() }, currentGame);
             download.ShowDialog();
         }
 
@@ -146,17 +158,17 @@ namespace pasta_web_file_finder
 
         private void listBox2_DoubleClick(object sender, EventArgs e)
         {
-            if (listBox2.Items.Count > 0)
-                axWindowsMediaPlayer1.URL = currentGame.Tracks[listBox2.SelectedItem.ToString()];
+            if (lstMusicsOST.Items.Count > 0)
+                axWindowsMediaPlayer1.URL = currentGame.Tracks[lstMusicsOST.SelectedItem.ToString()];
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (axWindowsMediaPlayer1.playState == WMPPlayState.wmppsStopped)
             {
-                if (listBox2.SelectedIndex < listBox2.Items.Count - 1)
+                if (lstMusicsOST.SelectedIndex < lstMusicsOST.Items.Count - 1)
                 {
-                    listBox2.SelectedIndex = listBox2.SelectedIndex + 1;
+                    lstMusicsOST.SelectedIndex = lstMusicsOST.SelectedIndex + 1;
                     listBox2_DoubleClick(sender, e);
                 }
             }
@@ -170,12 +182,34 @@ namespace pasta_web_file_finder
         private void button3_Click(object sender, EventArgs e)
         {
             List<String> lista = new List<string>();
-            foreach(String s in listBox2.Items)
+            foreach(String s in lstMusicsOST.Items)
             {
                 lista.Add(s);
             }
             Downloader download = new Downloader(lista, currentGame);
             download.ShowDialog();
+        }
+
+        private void axWindowsMediaPlayer1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lstSiteOSTS_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            lstMusicsOST.Items.Clear();
+            foreach (string s in listMusicOst)
+            {
+                if (s.Contains(textBox2.Text))
+                {
+                    lstMusicsOST.Items.Add(s);
+                }
+            }
         }
     }
 }
