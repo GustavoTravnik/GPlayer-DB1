@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WMPLib;
 using System.Threading;
+using System.Drawing;
 
 namespace pasta_web_file_finder
 {
@@ -27,8 +28,8 @@ namespace pasta_web_file_finder
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
-            textBox1.ReadOnly = true;
-            CreateLoadOn(lstSiteOSTS);
+            txtF1.ReadOnly = true;
+            CreateLoadOn(lstSiteOSTS1);
             ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
 
             for (int i = 65; i <= 90; i++)
@@ -40,8 +41,8 @@ namespace pasta_web_file_finder
 
         private void CreateLoadOn(Control control)
         {
-            lstMusicsOST.Enabled = false;
-            lstSiteOSTS.Enabled = false;
+            lstMusicsOST2.Enabled = false;
+            lstSiteOSTS1.Enabled = false;
             control.Visible = false;
             
             loadPicture.BackColor = System.Drawing.Color.Black;
@@ -54,8 +55,8 @@ namespace pasta_web_file_finder
         private void DestroyLoadOn(Control control)
         {
             loadPicture.Visible = false;
-            lstSiteOSTS.Enabled = true;
-            lstMusicsOST.Enabled = true;
+            lstSiteOSTS1.Enabled = true;
+            lstMusicsOST2.Enabled = true;
             control.Visible = true;
         }
 
@@ -84,14 +85,14 @@ namespace pasta_web_file_finder
 
             if (activeThreads == 0)
             {
-                Invoke(new MethodInvoker(() => DestroyLoadOn(lstSiteOSTS)));
-                textBox1.ReadOnly = false;
+                Invoke(new MethodInvoker(() => DestroyLoadOn(lstSiteOSTS1)));
+                txtF1.ReadOnly = false;
             }
         }
 
         private void AddItemToListBox1(Object[] args)
         {
-            lstSiteOSTS.Items.Add((String)args[0]);
+            lstSiteOSTS1.Items.Add((String)args[0]);
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
@@ -102,17 +103,17 @@ namespace pasta_web_file_finder
 
         private void LoadMusicsBySelectedGame(Object args)
         {
-            Invoke(new MethodInvoker(() => CreateLoadOn(lstMusicsOST)));
-            currentGame = games.Find(k => k.Nome.Equals(lstSiteOSTS.SelectedItem.ToString()));
+            Invoke(new MethodInvoker(() => CreateLoadOn(lstMusicsOST2)));
+            currentGame = games.Find(k => k.Nome.Equals(lstSiteOSTS1.SelectedItem.ToString()));
             currentGame.LoadMusics(wc);
-            lstMusicsOST.Items.Clear();
+            lstMusicsOST2.Items.Clear();
             listMusicOst.Clear();
             foreach (KeyValuePair<string, string> kvp in currentGame.Tracks)
             {
-                lstMusicsOST.Items.Add(kvp.Key);
+                lstMusicsOST2.Items.Add(kvp.Key);
                 listMusicOst.Add(kvp.Key);
             }
-            Invoke(new MethodInvoker(() => DestroyLoadOn(lstMusicsOST)));
+            Invoke(new MethodInvoker(() => DestroyLoadOn(lstMusicsOST2)));
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -128,21 +129,21 @@ namespace pasta_web_file_finder
             lock (LOCKER)
             {
                
-                CreateLoadOn(lstSiteOSTS);
-                lstSiteOSTS.Visible = false;
-                lstSiteOSTS.Items.Clear();
-                foreach (string s in currentSoundTracks.Where(k => k.ToLower().Contains(textBox1.Text.ToLower())))
+                CreateLoadOn(lstSiteOSTS1);
+                lstSiteOSTS1.Visible = false;
+                lstSiteOSTS1.Items.Clear();
+                foreach (string s in currentSoundTracks.Where(k => k.ToLower().Contains(txtF1.Text.ToLower())))
                 {
-                    lstSiteOSTS.Items.Add(s);
+                    lstSiteOSTS1.Items.Add(s);
                 }
-                lstSiteOSTS.Visible = true;
-                DestroyLoadOn(lstSiteOSTS);
+                lstSiteOSTS1.Visible = true;
+                DestroyLoadOn(lstSiteOSTS1);
             }
         }
 
         private void DownloadCurrentTrack()
         {
-            Downloader download = new Downloader(new List<string>(){ lstMusicsOST.SelectedItem.ToString() }, currentGame);
+            Downloader download = new Downloader(new List<string>(){ lstMusicsOST2.SelectedItem.ToString() }, currentGame);
             download.ShowDialog();
         }
 
@@ -158,17 +159,17 @@ namespace pasta_web_file_finder
 
         private void listBox2_DoubleClick(object sender, EventArgs e)
         {
-            if (lstMusicsOST.Items.Count > 0)
-                axWindowsMediaPlayer1.URL = currentGame.Tracks[lstMusicsOST.SelectedItem.ToString()];
+            if (lstMusicsOST2.Items.Count > 0)
+                axWindowsMediaPlayer1.URL = currentGame.Tracks[lstMusicsOST2.SelectedItem.ToString()];
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (axWindowsMediaPlayer1.playState == WMPPlayState.wmppsStopped)
             {
-                if (lstMusicsOST.SelectedIndex < lstMusicsOST.Items.Count - 1)
+                if (lstMusicsOST2.SelectedIndex < lstMusicsOST2.Items.Count - 1)
                 {
-                    lstMusicsOST.SelectedIndex = lstMusicsOST.SelectedIndex + 1;
+                    lstMusicsOST2.SelectedIndex = lstMusicsOST2.SelectedIndex + 1;
                     listBox2_DoubleClick(sender, e);
                 }
             }
@@ -182,7 +183,7 @@ namespace pasta_web_file_finder
         private void button3_Click(object sender, EventArgs e)
         {
             List<String> lista = new List<string>();
-            foreach(String s in lstMusicsOST.Items)
+            foreach(String s in lstMusicsOST2.Items)
             {
                 lista.Add(s);
             }
@@ -202,14 +203,44 @@ namespace pasta_web_file_finder
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            lstMusicsOST.Items.Clear();
+            lstMusicsOST2.Items.Clear();
             foreach (string s in listMusicOst)
             {
-                if (s.Contains(textBox2.Text))
+                if (s.Contains(txtF2.Text))
                 {
-                    lstMusicsOST.Items.Add(s);
+                    lstMusicsOST2.Items.Add(s);
                 }
             }
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            int textHeight = 26;
+            int playerHeight = 50;
+            int buttonHeight = 30;
+
+            txtF1.Location = new Point(0, 0);
+            txtF1.Size = new Size(Width / 2, textHeight);
+
+            txtF2.Location = new Point(Width / 2, 0);
+            txtF2.Size = new Size(Width / 2, textHeight);
+
+            lstSiteOSTS1.Location = new Point(0, textHeight);
+            lstSiteOSTS1.Size = new Size(Width / 2, Height - (buttonHeight * 2) - playerHeight - textHeight);
+
+            lstMusicsOST2.Location = new Point(Width / 2, textHeight);
+            lstMusicsOST2.Size = lstSiteOSTS1.Size;
+
+            btnDownloadOst1.Size = new Size(lstSiteOSTS1.Width, buttonHeight);
+            btnDownloadOst1.Location = new Point(0, lstSiteOSTS1.Bottom);
+
+            btnDownloadMusica2.Location = new Point(lstMusicsOST2.Left, lstMusicsOST2.Bottom);
+            btnDownloadMusica2.Size = new Size(lstMusicsOST2.Width / 2, buttonHeight);
+
+
+            btnDownloadAlbum3.Location = new Point(lstMusicsOST2.Left + lstMusicsOST2.Width / 2, lstMusicsOST2.Bottom);
+            btnDownloadAlbum3.Size = new Size(lstMusicsOST2.Width / 2, buttonHeight);
+
         }
     }
 }
