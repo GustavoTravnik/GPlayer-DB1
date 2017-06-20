@@ -26,7 +26,7 @@ namespace pasta_web_file_finder
             {
                 String source = wc.DownloadString(url);
                 String[] sourceList = Regex.Split(source, "<a href=\"");
-                sourceList = sourceList.Where(k => k.Contains(".mp3")).ToArray();
+                sourceList = sourceList.Where(k => k.Contains(".mp3") && !k.Contains("forums/member")).ToArray();
                 for (int i = 0; i < sourceList.Length; i++)
                 {
                     sourceList[i] = sourceList[i].Split('"')[0];
