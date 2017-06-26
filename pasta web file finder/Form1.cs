@@ -20,9 +20,12 @@ namespace pasta_web_file_finder
         Game currentGame;
         List<String> currentSoundTracks = new List<string>();
         List<String> listMusicOst = new List<string>();
+        List<String> sourceListAll = new List<string>();
         volatile int activeThreads = 0;
         private static readonly Object LOCKER = new object();
         Thread filterThread;
+        public static String OST_LIST_DUMP = Path.Combine(Application.StartupPath, "OSTDUMP.dmp");
+        Control selectedControl;
 
         public Form1()
         {
@@ -30,21 +33,38 @@ namespace pasta_web_file_finder
             Control.CheckForIllegalCrossThreadCalls = false;
             txtF1.ReadOnly = true;
             CreateLoadOn(lstSiteOSTS1);
-            ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
 
-            for (int i = 65; i <= 90; i++)
+            if (File.Exists(OST_LIST_DUMP))
             {
-                char letter = Convert.ToChar(i);
-                ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { letter.ToString() });
+                foreach (String s in File.ReadAllLines(OST_LIST_DUMP))
+                {
+                    Game game = new Game(s, wc);
+                    games.Add(game);
+                    Invoke(new MethodInvoker(() => AddItemToListBox1(new object[] { game.Nome })));
+                    currentSoundTracks.Add(game.Nome);
+                }
+
+                DestroyLoadOn(lstSiteOSTS1);
+                txtF1.ReadOnly = false;
             }
+            else
+            {
+                ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
+                for (int i = 65; i <= 90; i++)
+                {
+                    char letter = Convert.ToChar(i);
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { letter.ToString() });
+                }
+            }
+            AdjustScreen();
         }
 
         private void CreateLoadOn(Control control)
         {
+            selectedControl = control;
             lstMusicsOST2.Enabled = false;
             lstSiteOSTS1.Enabled = false;
-            control.Visible = false;
-            
+            control.Visible = false;            
             loadPicture.BackColor = System.Drawing.Color.Black;
             loadPicture.Size = control.Size;
             loadPicture.Location = control.Location;
@@ -54,6 +74,7 @@ namespace pasta_web_file_finder
 
         private void DestroyLoadOn(Control control)
         {
+            selectedControl = control;
             loadPicture.Visible = false;
             lstSiteOSTS1.Enabled = true;
             lstMusicsOST2.Enabled = true;
@@ -76,17 +97,21 @@ namespace pasta_web_file_finder
 
             foreach(String s in sourceParts)
             {
+                sourceListAll.Add(s);
                 Game game = new Game(s, wc);
                 games.Add(game);
                 Invoke(new MethodInvoker(() => AddItemToListBox1(new object[] { game.Nome })));
                 currentSoundTracks.Add(game.Nome);
             }
+
             activeThreads--;
 
             if (activeThreads == 0)
             {
                 Invoke(new MethodInvoker(() => DestroyLoadOn(lstSiteOSTS1)));
                 txtF1.ReadOnly = false;
+                File.WriteAllLines(OST_LIST_DUMP, sourceListAll);
+                sourceListAll.Clear();
             }
         }
 
@@ -165,7 +190,7 @@ namespace pasta_web_file_finder
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (axWindowsMediaPlayer1.playState == WMPPlayState.wmppsStopped)
+            if (axWindowsMediaPlayer1.playState == WMPPlayState.wmppsStopped && checkBox1.Checked)
             {
                 if (lstMusicsOST2.SelectedIndex < lstMusicsOST2.Items.Count - 1)
                 {
@@ -177,7 +202,7 @@ namespace pasta_web_file_finder
 
         private void axWindowsMediaPlayer1_MediaChange(object sender, AxWMPLib._WMPOCXEvents_MediaChangeEvent e)
         {
-            Text = "NP - " + axWindowsMediaPlayer1.Ctlcontrols.currentItem.name;
+            Text = "KHInsider Music Player - " + currentGame.Nome + " / " + axWindowsMediaPlayer1.Ctlcontrols.currentItem.name;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -213,22 +238,25 @@ namespace pasta_web_file_finder
             }
         }
 
-        private void Form1_SizeChanged(object sender, EventArgs e)
+        private void AdjustScreen()
         {
             int textHeight = 26;
             int playerHeight = 50;
             int buttonHeight = 30;
 
-            txtF1.Location = new Point(0, 0);
+            picLogo.Location = new Point(0, 0);
+            picLogo.Size = new Size(Width, 50);
+
+            txtF1.Location = new Point(0, 50);
             txtF1.Size = new Size(Width / 2, textHeight);
 
-            txtF2.Location = new Point(Width / 2, 0);
+            txtF2.Location = new Point(Width / 2, 50);
             txtF2.Size = new Size(Width / 2, textHeight);
 
-            lstSiteOSTS1.Location = new Point(0, textHeight);
-            lstSiteOSTS1.Size = new Size(Width / 2, Height - (buttonHeight * 2) - playerHeight - textHeight);
+            lstSiteOSTS1.Location = new Point(0, textHeight + 50);
+            lstSiteOSTS1.Size = new Size(Width / 2, Height - (buttonHeight * 2) - playerHeight - (textHeight + 50));
 
-            lstMusicsOST2.Location = new Point(Width / 2, textHeight);
+            lstMusicsOST2.Location = new Point(Width / 2, textHeight + 50);
             lstMusicsOST2.Size = lstSiteOSTS1.Size;
 
             btnDownloadOst1.Size = new Size(lstSiteOSTS1.Width, buttonHeight);
@@ -237,9 +265,19 @@ namespace pasta_web_file_finder
             btnDownloadMusica2.Location = new Point(lstMusicsOST2.Left, lstMusicsOST2.Bottom);
             btnDownloadMusica2.Size = new Size(lstMusicsOST2.Width / 2, buttonHeight);
 
-
             btnDownloadAlbum3.Location = new Point(lstMusicsOST2.Left + lstMusicsOST2.Width / 2, lstMusicsOST2.Bottom);
             btnDownloadAlbum3.Size = new Size(lstMusicsOST2.Width / 2, buttonHeight);
+
+            if (selectedControl != null)
+            {
+                loadPicture.Size = selectedControl.Size;
+                loadPicture.Location = selectedControl.Location;
+            }
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            AdjustScreen();
 
         }
     }
