@@ -58,6 +58,7 @@
             this.lstSiteOSTS1.Name = "lstSiteOSTS1";
             this.lstSiteOSTS1.ScrollAlwaysVisible = true;
             this.lstSiteOSTS1.Size = new System.Drawing.Size(412, 249);
+            this.lstSiteOSTS1.Sorted = true;
             this.lstSiteOSTS1.TabIndex = 0;
             this.lstSiteOSTS1.SelectedIndexChanged += new System.EventHandler(this.lstSiteOSTS_SelectedIndexChanged);
             this.lstSiteOSTS1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
@@ -73,6 +74,7 @@
             this.lstMusicsOST2.Name = "lstMusicsOST2";
             this.lstMusicsOST2.ScrollAlwaysVisible = true;
             this.lstMusicsOST2.Size = new System.Drawing.Size(412, 249);
+            this.lstMusicsOST2.Sorted = true;
             this.lstMusicsOST2.TabIndex = 1;
             this.lstMusicsOST2.DoubleClick += new System.EventHandler(this.listBox2_DoubleClick);
             // 

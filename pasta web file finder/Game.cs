@@ -37,7 +37,7 @@ namespace pasta_web_file_finder
                 {
                     String source = wc.DownloadString(url);
                     String[] sourceList = Regex.Split(source, "<a href=\"");
-                    sourceList = sourceList.Where(k => k.Contains(".mp3") && !k.Contains("forums/member")).ToArray();
+                    sourceList = sourceList.Where(k => k.Contains(".mp3") && !k.Contains("forums/member") && !k.Contains("cp/add_album")).ToArray();
                     for (int i = 0; i < sourceList.Length; i++)
                     {
                         sourceList[i] = sourceList[i].Split('"')[0];
@@ -52,7 +52,7 @@ namespace pasta_web_file_finder
 
                     foreach (string s in sourceList)
                     {
-                        Tracks.Add(s.Split('/')[s.Split('/').Length - 1].Replace('-', ' ').Replace("%20", " "), s);
+                        Tracks.Add(WebUtility.UrlDecode(s.Split('/')[s.Split('/').Length - 1].Replace('-', ' ')), s);
                     }
 
                     File.WriteAllLines(OST_LIST_DUMP, sourceList);
@@ -63,6 +63,7 @@ namespace pasta_web_file_finder
         public void Download(ref WebClient wc, String track)
         {
             Directory.CreateDirectory(Path.Combine(Application.StartupPath, "OST", Nome));
+            wc.Proxy = new WebProxy("192.168.113.245:3128") { UseDefaultCredentials = true, BypassProxyOnLocal = true };
             wc.DownloadFileAsync(new Uri(track), Path.Combine(Application.StartupPath, "OST", Nome, track.Split('/')[track.Split('/').Length - 1].Replace('-', ' ')));
         }
 
