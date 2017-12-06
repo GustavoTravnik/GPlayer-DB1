@@ -64,7 +64,7 @@ namespace pasta_web_file_finder
         {
             Directory.CreateDirectory(Path.Combine(Application.StartupPath, "OST", Nome));
             wc.Proxy = new WebProxy("192.168.113.245:3128") { UseDefaultCredentials = true, BypassProxyOnLocal = true };
-            wc.DownloadFileAsync(new Uri(track), Path.Combine(Application.StartupPath, "OST", Nome, track.Split('/')[track.Split('/').Length - 1].Replace('-', ' ')));
+            wc.DownloadFileAsync(new Uri(track), Path.Combine(Application.StartupPath, "OST", Nome, WebUtility.UrlDecode(track.Split('/')[track.Split('/').Length - 1].Replace('-', ' '))));
         }
 
         public String ResolveFileName(String url, WebClient wc)
