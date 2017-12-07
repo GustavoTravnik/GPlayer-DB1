@@ -47,7 +47,7 @@ namespace pasta_web_file_finder
 
                     for (int i = 0; i < sourceList.Length; i++)
                     {
-                        sourceList[i] = ResolveFileName(sourceList[i], wc);
+                        sourceList[i] = WebUtility.UrlDecode(ResolveFileName(sourceList[i], wc));
                     }
 
                     foreach (string s in sourceList)
