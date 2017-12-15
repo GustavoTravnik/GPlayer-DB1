@@ -25,7 +25,7 @@ namespace pasta_web_file_finder
             InitializeComponent();
 
             this.totalFiles = tracks.Count;
-            //progressBar1.Maximum = totalFiles;
+            progressBar1.Maximum = totalFiles;
             this.tracks = tracks;
             this.currentGame = currentGame;
             wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
