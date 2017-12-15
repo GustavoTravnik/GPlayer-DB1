@@ -47,6 +47,10 @@ namespace pasta_web_file_finder
 
                     for (int i = 0; i < sourceList.Length; i++)
                     {
+                        if (!sourceList[i].StartsWith("http"))
+                        {
+                            sourceList[i] = "https://downloads.khinsider.com" + sourceList[i];
+                        }
                         sourceList[i] = WebUtility.UrlDecode(ResolveFileName(sourceList[i], wc));
                     }
 
