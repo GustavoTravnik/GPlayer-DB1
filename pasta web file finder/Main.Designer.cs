@@ -1,6 +1,6 @@
 ﻿namespace pasta_web_file_finder
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.lstSiteOSTS1 = new System.Windows.Forms.ListBox();
             this.lstMusicsOST2 = new System.Windows.Forms.ListBox();
             this.txtF1 = new System.Windows.Forms.TextBox();
@@ -166,7 +166,7 @@
             // 
             // picLogo
             // 
-            this.picLogo.Image = global::pasta_web_file_finder.Properties.Resources.bannerlite2;
+            this.picLogo.Image = global::GameWPlayer.Properties.Resources.bannerlite2;
             this.picLogo.Location = new System.Drawing.Point(393, 12);
             this.picLogo.Name = "picLogo";
             this.picLogo.Size = new System.Drawing.Size(106, 26);
@@ -177,7 +177,7 @@
             // loadPicture
             // 
             this.loadPicture.BackColor = System.Drawing.Color.Black;
-            this.loadPicture.Image = global::pasta_web_file_finder.Properties.Resources.loading;
+            this.loadPicture.Image = global::GameWPlayer.Properties.Resources.loading;
             this.loadPicture.Location = new System.Drawing.Point(439, 283);
             this.loadPicture.Name = "loadPicture";
             this.loadPicture.Size = new System.Drawing.Size(10, 10);

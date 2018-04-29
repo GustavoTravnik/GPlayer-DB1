@@ -17,10 +17,10 @@ namespace pasta_web_file_finder
 
         WebClient wc = new WebClient();
         List<String> tracks;
-        Game currentGame;
+        Source currentGame;
         int totalFiles = 0;
 
-        public Downloader(List<String> tracks, Game currentGame)
+        public Downloader(List<String> tracks, Source currentGame)
         {
             InitializeComponent();
 

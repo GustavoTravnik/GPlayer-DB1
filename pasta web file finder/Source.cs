@@ -8,14 +8,14 @@ using System.Windows.Forms;
 
 namespace pasta_web_file_finder
 {
-    public class Game
+    public class Source
     {
         private string url = String.Empty;
         public string Nome { get; set; } = string.Empty;
         public Dictionary<string, string> Tracks { get; set; } = new Dictionary<string, string>();
         public String OST_LIST_DUMP = (Application.StartupPath);
 
-        public Game(String url, WebClient wc)
+        public Source(String url, WebClient wc)
         {
             this.url = url;
             Nome = url.Split('/')[url.Split('/').Length - 1].Replace('-', ' ');
@@ -67,7 +67,7 @@ namespace pasta_web_file_finder
         public void Download(ref WebClient wc, String track)
         {
             Directory.CreateDirectory(Path.Combine(Application.StartupPath, "OST", Nome));
-            wc.Proxy = new WebProxy("192.168.113.245:3128") { UseDefaultCredentials = true, BypassProxyOnLocal = true };
+           // wc.Proxy = new WebProxy("192.168.113.245:3128") { UseDefaultCredentials = true, BypassProxyOnLocal = true };
             wc.DownloadFileAsync(new Uri(track), Path.Combine(Application.StartupPath, "OST", Nome, WebUtility.UrlDecode(track.Split('/')[track.Split('/').Length - 1].Replace('-', ' '))));
         }
 

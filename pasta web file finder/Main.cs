@@ -13,11 +13,11 @@ using System.Drawing;
 
 namespace pasta_web_file_finder
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         WebClient wc = new WebClient();
-        List<Game> games = new List<Game>();
-        Game currentGame;
+        List<Source> games = new List<Source>();
+        Source currentGame;
         List<String> currentSoundTracks = new List<string>();
         List<String> listMusicOst = new List<string>();
         List<String> sourceListAll = new List<string>();
@@ -27,7 +27,7 @@ namespace pasta_web_file_finder
         public static String OST_LIST_DUMP = Path.Combine(Application.StartupPath, "OSTDUMP.dmp");
         Control selectedControl;
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
@@ -38,7 +38,7 @@ namespace pasta_web_file_finder
             {
                 foreach (String s in File.ReadAllLines(OST_LIST_DUMP))
                 {
-                    Game game = new Game(s, wc);
+                    Source game = new Source(s, wc);
                     games.Add(game);
                     Invoke(new MethodInvoker(() => AddItemToListBox1(new object[] { game.Nome })));
                     currentSoundTracks.Add(game.Nome);
@@ -90,16 +90,16 @@ namespace pasta_web_file_finder
             String source = (wc.DownloadString("https://downloads.khinsider.com/game-soundtracks/browse/" + simbol));
             source = Regex.Split(source, "<p align=\"left\">")[1];
             String[] sourceParts = Regex.Split(source, "<a href=\"");
-            sourceParts = sourceParts.Where(k => k.StartsWith("http") && k.Contains("album")).ToArray();
+            sourceParts = sourceParts.Where(k => k.StartsWith("/game-soundtracks") && k.Contains("album")).ToArray();
             for (int i = 0; i < sourceParts.Length; i++)
             {
-                sourceParts[i] = sourceParts[i].Split('"')[0];
+                sourceParts[i] = "https://downloads.khinsider.com" + sourceParts[i].Split('"')[0];
             }
 
             foreach(String s in sourceParts)
             {
                 sourceListAll.Add(s);
-                Game game = new Game(s, wc);
+                Source game = new Source(s, wc);
                 games.Add(game);
                 Invoke(new MethodInvoker(() => AddItemToListBox1(new object[] { game.Nome })));
                 currentSoundTracks.Add(game.Nome);
