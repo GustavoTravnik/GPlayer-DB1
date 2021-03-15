@@ -113,13 +113,15 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\loading.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\bannerlite2.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.ico" />
+    <None Include="Resources\image.png" />
+    <Content Include="Resources\loading.gif" />
+    <None Include="Resources\pink_texture_by_dancinghamham.png" />
+    <None Include="Resources\pause%281%29.png" />
+    <None Include="Resources\pause.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

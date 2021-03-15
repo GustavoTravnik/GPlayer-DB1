@@ -35,6 +35,8 @@ namespace pasta_web_file_finder
                 }
                 else
                 {
+                    ServicePointManager.Expect100Continue = true;
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     String source = wc.DownloadString(url);
                     String[] sourceList = Regex.Split(source, "<a href=\"");
                     sourceList = sourceList.Where(k => k.Contains(".mp3") && !k.Contains("forums/member") && !k.Contains("cp/add_album")).ToArray();
@@ -79,8 +81,8 @@ namespace pasta_web_file_finder
             {
                 sourceList[i] = sourceList[i].Split('"')[0];
             }
-            sourceList = sourceList.Where(k => k.Contains(".mp3") && k.Contains("/ost/")).ToArray();
-           
+            sourceList = sourceList.Where(k => k.Contains(".mp3") && (k.Contains("/ost/") || k.Contains("soundtracks"))).ToArray();
+
 
             return sourceList[0];
         }
