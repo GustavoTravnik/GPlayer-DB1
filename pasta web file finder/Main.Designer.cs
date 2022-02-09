@@ -36,7 +36,6 @@
             this.btnDownloadMusica2 = new System.Windows.Forms.Button();
             this.btnDownloadOst1 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.player = new AxWMPLib.AxWindowsMediaPlayer();
             this.btnDownloadAlbum3 = new System.Windows.Forms.Button();
             this.txtF2 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -50,7 +49,7 @@
             this.seekTimer = new System.Windows.Forms.Timer(this.components);
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.loadPicture = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.player)).BeginInit();
+            this.player = new AxWMPLib.AxWindowsMediaPlayer();
             this.panelGeral.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackVolume)).BeginInit();
@@ -59,15 +58,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.pic_trackbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player)).BeginInit();
             this.SuspendLayout();
             // 
             // lstSiteOSTS1
             // 
             this.lstSiteOSTS1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lstSiteOSTS1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.lstSiteOSTS1.BackColor = System.Drawing.Color.Black;
             this.lstSiteOSTS1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstSiteOSTS1.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstSiteOSTS1.ForeColor = System.Drawing.Color.Purple;
+            this.lstSiteOSTS1.ForeColor = System.Drawing.Color.Lime;
             this.lstSiteOSTS1.FormattingEnabled = true;
             this.lstSiteOSTS1.HorizontalScrollbar = true;
             this.lstSiteOSTS1.IntegralHeight = false;
@@ -83,10 +83,10 @@
             // lstMusicsOST2
             // 
             this.lstMusicsOST2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lstMusicsOST2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.lstMusicsOST2.BackColor = System.Drawing.Color.Black;
             this.lstMusicsOST2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstMusicsOST2.Font = new System.Drawing.Font("Segoe Print", 12F);
-            this.lstMusicsOST2.ForeColor = System.Drawing.Color.Purple;
+            this.lstMusicsOST2.ForeColor = System.Drawing.Color.Lime;
             this.lstMusicsOST2.FormattingEnabled = true;
             this.lstMusicsOST2.HorizontalScrollbar = true;
             this.lstMusicsOST2.IntegralHeight = false;
@@ -102,10 +102,10 @@
             // txtF1
             // 
             this.txtF1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtF1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.txtF1.BackColor = System.Drawing.Color.Black;
             this.txtF1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtF1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtF1.ForeColor = System.Drawing.Color.Purple;
+            this.txtF1.ForeColor = System.Drawing.Color.Lime;
             this.txtF1.Location = new System.Drawing.Point(2, 57);
             this.txtF1.Name = "txtF1";
             this.txtF1.Size = new System.Drawing.Size(439, 27);
@@ -121,7 +121,7 @@
             this.btnDownloadMusica2.BackColor = System.Drawing.Color.Transparent;
             this.btnDownloadMusica2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDownloadMusica2.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDownloadMusica2.ForeColor = System.Drawing.Color.Purple;
+            this.btnDownloadMusica2.ForeColor = System.Drawing.Color.Lime;
             this.btnDownloadMusica2.Location = new System.Drawing.Point(450, 438);
             this.btnDownloadMusica2.Name = "btnDownloadMusica2";
             this.btnDownloadMusica2.Size = new System.Drawing.Size(215, 29);
@@ -136,7 +136,7 @@
             this.btnDownloadOst1.BackColor = System.Drawing.Color.Transparent;
             this.btnDownloadOst1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDownloadOst1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDownloadOst1.ForeColor = System.Drawing.Color.Purple;
+            this.btnDownloadOst1.ForeColor = System.Drawing.Color.Lime;
             this.btnDownloadOst1.Location = new System.Drawing.Point(2, 438);
             this.btnDownloadOst1.Name = "btnDownloadOst1";
             this.btnDownloadOst1.Size = new System.Drawing.Size(439, 29);
@@ -151,24 +151,13 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // player
-            // 
-            this.player.Enabled = true;
-            this.player.Location = new System.Drawing.Point(2, 0);
-            this.player.Name = "player";
-            this.player.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("player.OcxState")));
-            this.player.Size = new System.Drawing.Size(886, 67);
-            this.player.TabIndex = 5;
-            this.player.Visible = false;
-            this.player.MediaChange += new AxWMPLib._WMPOCXEvents_MediaChangeEventHandler(this.axWindowsMediaPlayer1_MediaChange);
-            // 
             // btnDownloadAlbum3
             // 
             this.btnDownloadAlbum3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnDownloadAlbum3.BackColor = System.Drawing.Color.Transparent;
             this.btnDownloadAlbum3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDownloadAlbum3.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDownloadAlbum3.ForeColor = System.Drawing.Color.Purple;
+            this.btnDownloadAlbum3.ForeColor = System.Drawing.Color.Lime;
             this.btnDownloadAlbum3.Location = new System.Drawing.Point(674, 438);
             this.btnDownloadAlbum3.Name = "btnDownloadAlbum3";
             this.btnDownloadAlbum3.Size = new System.Drawing.Size(215, 29);
@@ -180,10 +169,10 @@
             // txtF2
             // 
             this.txtF2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtF2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.txtF2.BackColor = System.Drawing.Color.Black;
             this.txtF2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtF2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtF2.ForeColor = System.Drawing.Color.Purple;
+            this.txtF2.ForeColor = System.Drawing.Color.Lime;
             this.txtF2.Location = new System.Drawing.Point(450, 57);
             this.txtF2.Name = "txtF2";
             this.txtF2.Size = new System.Drawing.Size(439, 27);
@@ -197,7 +186,7 @@
             // 
             this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox1.AutoSize = true;
-            this.checkBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.checkBox1.BackColor = System.Drawing.Color.Black;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Font = new System.Drawing.Font("Comic Sans MS", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -214,6 +203,7 @@
             this.panelGeral.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelGeral.BackColor = System.Drawing.Color.Black;
             this.panelGeral.Controls.Add(this.txtF1);
             this.panelGeral.Controls.Add(this.lstSiteOSTS1);
             this.panelGeral.Controls.Add(this.txtF2);
@@ -228,7 +218,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.panel1.BackColor = System.Drawing.Color.Black;
             this.panel1.Controls.Add(this.trackVolume);
             this.panel1.Controls.Add(this.picPlayPause);
             this.panel1.Controls.Add(this.lblTime);
@@ -270,9 +260,9 @@
             // 
             this.lblTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTime.AutoSize = true;
-            this.lblTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.lblTime.BackColor = System.Drawing.Color.Black;
             this.lblTime.Font = new System.Drawing.Font("Castellar", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTime.ForeColor = System.Drawing.Color.Blue;
+            this.lblTime.ForeColor = System.Drawing.Color.GhostWhite;
             this.lblTime.Location = new System.Drawing.Point(669, 20);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(77, 25);
@@ -332,11 +322,22 @@
             this.loadPicture.TabStop = false;
             this.loadPicture.Visible = false;
             // 
+            // player
+            // 
+            this.player.Enabled = true;
+            this.player.Location = new System.Drawing.Point(2, 0);
+            this.player.Name = "player";
+            this.player.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("player.OcxState")));
+            this.player.Size = new System.Drawing.Size(886, 67);
+            this.player.TabIndex = 5;
+            this.player.Visible = false;
+            this.player.MediaChange += new AxWMPLib._WMPOCXEvents_MediaChangeEventHandler(this.axWindowsMediaPlayer1_MediaChange);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.BackColor = System.Drawing.Color.Gray;
             this.ClientSize = new System.Drawing.Size(892, 635);
             this.Controls.Add(this.player);
             this.Controls.Add(this.picLogo);
@@ -350,7 +351,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KHInsider Music Player";
             this.SizeChanged += new System.EventHandler(this.Main_SizeChanged);
-            ((System.ComponentModel.ISupportInitialize)(this.player)).EndInit();
             this.panelGeral.ResumeLayout(false);
             this.panelGeral.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -361,6 +361,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pic_trackbar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.loadPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.player)).EndInit();
             this.ResumeLayout(false);
 
         }

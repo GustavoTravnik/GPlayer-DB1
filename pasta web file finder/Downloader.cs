@@ -46,7 +46,6 @@ namespace pasta_web_file_finder
             }
             else
             {
-                MessageBox.Show("Download Realizado com Sucesso");
                 Close();
             }
         }

@@ -30,7 +30,7 @@ namespace pasta_web_file_finder
                 {
                     foreach (string s in File.ReadAllLines(OST_LIST_DUMP))
                     {
-                        Tracks.Add(s.Split('/')[s.Split('/').Length - 1].Replace('-', ' ').Replace("%20", " "), s);
+                        Tracks.Add(s.Split('/')[s.Split('/').Length - 1].Replace('-', ' ').Replace("%20", " "), s.Replace("#", "%23"));
                     }
                 }
                 else
@@ -58,7 +58,7 @@ namespace pasta_web_file_finder
 
                     foreach (string s in sourceList)
                     {
-                        Tracks.Add(WebUtility.UrlDecode(s.Split('/')[s.Split('/').Length - 1].Replace('-', ' ')), s);
+                        Tracks.Add(WebUtility.UrlDecode(s.Split('/')[s.Split('/').Length - 1].Replace('-', ' ')), s.Replace("#", "%23"));
                     }
 
                     File.WriteAllLines(OST_LIST_DUMP, sourceList);

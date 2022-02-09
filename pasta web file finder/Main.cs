@@ -164,7 +164,7 @@ namespace pasta_web_file_finder
         private void DownloadCurrentTrack()
         {
             Downloader download = new Downloader(new List<string>(){ lstMusicsOST2.SelectedItem.ToString() }, currentGame);
-            download.ShowDialog();
+            download.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -209,7 +209,7 @@ namespace pasta_web_file_finder
                 lista.Add(s);
             }
             Downloader download = new Downloader(lista, currentGame);
-            download.ShowDialog();
+            download.Show();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)

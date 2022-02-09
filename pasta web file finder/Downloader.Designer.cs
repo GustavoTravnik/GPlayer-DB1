@@ -64,7 +64,10 @@
             this.Controls.Add(this.progressBar2);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
             this.Name = "Downloader";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Downloader";
             this.ResumeLayout(false);
             this.PerformLayout();
