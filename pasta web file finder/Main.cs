@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -50,12 +50,13 @@ namespace pasta_web_file_finder
             }
             else
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
-                for (int i = 65; i <= 90; i++)
-                {
-                    char letter = Convert.ToChar(i);
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { letter.ToString() });
-                }
+                //ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "#" });
+                //for (int i = 65; i <= 90; i++)
+                //{
+                //    char letter = Convert.ToChar(i);
+                //    ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { letter.ToString() });
+                //}
+                ThreadPool.QueueUserWorkItem(new WaitCallback(FillListBySimbol), new Object[] { "D" });
             }
         }
 
@@ -78,20 +79,39 @@ namespace pasta_web_file_finder
         public void FillListBySimbol(Object args)
         {
             activeThreads++;
+            var allParsedLines = new List<string>();
             String simbol = (String)((Object[])args)[0];
             WebClient wc = new WebClient();
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            String source = (wc.DownloadString("https://downloads.khinsider.com/game-soundtracks/browse/" + simbol));
-            source = Regex.Split(source, "<p align=\"left\">")[1];
-            String[] sourceParts = Regex.Split(source, "<a href=\"");
-            sourceParts = sourceParts.Where(k => k.StartsWith("/game-soundtracks") && k.Contains("album")).ToArray();
-            for (int i = 0; i < sourceParts.Length; i++)
+            String source = (wc.DownloadString("https://downloads.khinsider.com/game-soundtracks"));
+            var totalCount = Convert.ToInt32(Regex.Split(source, "<a title=\"End\" href=\"\\?page=")[1].Split('"')[0]);
+            var albumLines = Regex.Split(source, "<a href=\"/game-soundtracks/album/").ToList();
+            var parserdLines = albumLines
+                .Select(x => Regex.Split(x, "\">")[0])
+                .Where(x => !x.Contains("!DOCTYPE html"))
+                .Distinct()
+                .Select(x => "https://downloads.khinsider.com/game-soundtracks/album/" + x);
+
+            allParsedLines.AddRange(parserdLines);
+
+            for (int i = 2; i < totalCount; i++)
             {
-                sourceParts[i] = "https://downloads.khinsider.com" + sourceParts[i].Split('"')[0];
+                var newFindSite = "https://downloads.khinsider.com/game-soundtracks?page=" + i.ToString();
+                String source2 = wc.DownloadString(newFindSite);
+                var albumLines2 = Regex.Split(source2, "<a href=\"/game-soundtracks/album/").ToList();
+                var parserdLines2 = albumLines2
+                    .Select(x => Regex.Split(x, "\">")[0])
+                    .Where(x => !x.Contains("!DOCTYPE html"))
+                    .Distinct()
+                    .Select(x => "https://downloads.khinsider.com/game-soundtracks/album/" + x);
+
+                allParsedLines.AddRange(parserdLines2);
             }
 
-            foreach(String s in sourceParts)
+            allParsedLines = allParsedLines.Distinct().ToList();
+
+            foreach (String s in allParsedLines)
             {
                 sourceListAll.Add(s);
                 Source game = new Source(s, wc);
